@@ -9,6 +9,6 @@ if PROJECT_DIR not in sys.path:
     sys.path.append(PROJECT_DIR)
 
 from .containers import flatten_list, flatten_dict, \
-     ensure_dict, ensure_list, \
+     ensure_dict, ensure_list, deep_update, \
      RecordDict
 from .textutils import TextCleaner
