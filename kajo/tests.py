@@ -3,6 +3,8 @@
 import unittest
 
 from utils.containers import *
+from decorators import *
+
 
 TEXT_DICT = {
     "name": "Report Summaries Departement",
@@ -23,7 +25,7 @@ TEXT_DICT = {
     }
 
 
-class TestRecordDictMethods(unittest.TestCase):
+class TestUtilsRecordDictMethods(unittest.TestCase):
     text_dict = TEXT_DICT.copy()
     test_list_of_dicts = [
         {"label": "GPE", "text": "Philippines"},
@@ -134,7 +136,7 @@ class TestRecordDictMethods(unittest.TestCase):
             obj["gpe"]
 
 
-class TestFunctions(unittest.TestCase):
+class TestUtilsFunctions(unittest.TestCase):
     text_dict = TEXT_DICT.copy()
 
     def test_deep_update(self):
@@ -153,6 +155,19 @@ class TestFunctions(unittest.TestCase):
                                       ['Sonic', 'Youth', 'Judas', 'Priest'])
         self.assertEqual(flatten_list([1, [3, 4], 'kiu']), [1, 3, 4, 'kiu'])
         self.assertEqual(flatten_list([1, [[2, 3], [4, 5]], 6]), [1, 2, 3, 4, 5, 6])
+
+
+class TestDecorators(unittest.TestCase):
+    def test_objectify(self):
+
+        @objectify
+        def test_dict():
+            return {"name": "Bromba", "loc": {"X": 12, "Y": 15, "elev": .1}}
+
+        result = test_dict()
+        self.assertEqual(getattr(result, "name"), "Bromba")
+        self.assertEqual(result.loc.Y, 15)
+        self.assertEqual(result.loc.elev, .1)
 
 
 if __name__ == "__main__":
