@@ -19,8 +19,8 @@ TEXT_DICT = {
             "lon": 4.66092,
             "lat": 50.640991
             }
-            }
-            }
+        }
+    }
 
 
 class TestRecordDictMethods(unittest.TestCase):
@@ -78,6 +78,19 @@ class TestRecordDictMethods(unittest.TestCase):
 
         with self.assertRaises(KeyError):
             obj["place_location_lon"]
+
+    def test_update(self):
+        test_dict = {
+            "name": "Ministry of Silly Walks",
+            "curvature": "flat",
+            "place": {"location": {"lon": 12.5, "lat": 50.640991}}
+        }
+        obj = RecordDict(**self.text_dict)
+        obj.update(test_dict)
+        self.assertTrue("curvature" in obj)
+        self.assertTrue(obj.curvature, "flat")
+        self.assertEqual(obj["name"], "Ministry of Silly Walks")
+        self.assertEqual(obj.place.location.lon, 12.5)
 
     def test_lookup(self):
         obj = RecordDict(**self.text_dict)

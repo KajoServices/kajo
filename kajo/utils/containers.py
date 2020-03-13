@@ -15,6 +15,14 @@ class RecordDict(dict):
             self[key] = self._objectify_recoursive(val)
         self.__dict__ = self
 
+    def _restructure(self, new_dict):
+        for key in list(self.keys()):
+            del self[key]
+
+        for key, val in new_dict.items():
+            self[key] = self._objectify_recoursive(val)
+        self.__dict__ = self
+
     def exclude(self, *args):
         for key in args:
             del self[key]
@@ -100,7 +108,6 @@ class RecordDict(dict):
         Out[3]: {
             'GPE': ['Philippines', 'Nigeria', 'Turkey'],
             'ORG': ['FSC', 'EAGF']}
-
         :param container: <list> of <dict>'s
         :param key: <str> - key name which becomes a key of the result
         :param val: <str> - key name for value items to be aggregated
@@ -220,13 +227,11 @@ class RecordDict(dict):
          :return: None
          """
         flat = flatten_dict(self, separator=separator)
+        self._restructure(flat)
 
-        for key in list(self.keys()):
-            del self[key]
-
-        for key, val in flat.items():
-            self[key] = self._objectify_recoursive(val)
-            self.__dict__ = self
+    def update(self, new_dict):
+        """Override .update() with the behavior of deep_update."""
+        deep_update(self, new_dict)
 
 
 def flatten_dict(dict_, parent_key='', separator='_'):
