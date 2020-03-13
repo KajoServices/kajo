@@ -239,11 +239,25 @@ def flatten_dict(dict_, parent_key='', separator='_'):
                 )
         else:
             items.append((new_key, val))
+
     return dict(items)
 
 
 def flatten_list(list_):
-    return [item for sublist in list_ for item in sublist]
+    """
+    Flattens out nested lists.
+
+    Example:
+    In [1]: flatten_list([1, [[2, 3], [4, 5]], 6])                                 Out[1]: [1, 2, 3, 4, 5, 6]
+    """
+    items = []
+    for element in list_:
+        if isinstance(element, list):
+            items.extend(flatten_list(element))
+        else:
+            items.append(element)
+
+    return items
 
 
 def ensure_dict(obj):
@@ -263,3 +277,18 @@ def ensure_list(obj):
         return flatten_list([[k, v] for k, v in obj.items()])
 
     return [obj]
+
+
+def deep_update(source, overrides):
+    """
+    Updates a nested dictionary or similar mapping.
+    Modifies `source` in place.
+    """
+    for key, value in overrides.items():
+        if isinstance(value, collections.Mapping) and value:
+            returned = deep_update(source.get(key, {}), value)
+            source[key] = returned
+        else:
+            source[key] = overrides[key]
+
+    return source
