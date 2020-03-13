@@ -234,6 +234,20 @@ class RecordDict(dict):
         deep_update(self, new_dict)
 
 
+def objectify(method):
+    """Decorator that converts <dict> to instance of <RecordDict>."""
+    def objectify_wrapper(*args, **kwargs):
+        result = method(*args, **kwargs)
+        if isinstance(result, dict):
+            result = RecordDict(**result)
+        elif isinstance(result, (list, tuple)):
+            type_ = type(result)
+            result = type_(RecordDict(**elm) for elm in result)
+
+        return result
+    return objectify_wrapper
+
+
 def flatten_dict(dict_, parent_key='', separator='_'):
     items = []
     for key, val in dict_.items():
