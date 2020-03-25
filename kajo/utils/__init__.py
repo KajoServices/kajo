@@ -12,3 +12,4 @@ from .containers import flatten_list, flatten_dict, \
      ensure_dict, ensure_list, deep_update, \
      RecordDict
 from .textutils import TextCleaner
+from .cmd import runcmd
