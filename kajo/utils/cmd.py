@@ -1,4 +1,8 @@
+"""Command line and file operations."""
+
 import subprocess
+import tempfile
+from contextlib import contextmanager
 
 
 class CommandLineError(Exception):
@@ -65,3 +69,14 @@ def runcmd(*cmd, **kwargs):
         raise ShellError(' '.join(cmd), pipe.returncode, stdout, stderr)
 
     return stdout
+
+
+@contextmanager
+def as_file(bytes_):
+    """
+    Yields a filename for a tempfile created from bytes.
+    Useful when reading content from a certain URL.
+    """
+    with tempfile.NamedTemporaryFile() as tfile:
+        tfile.write(bytes_)
+        yield tfile.name
