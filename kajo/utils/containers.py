@@ -264,15 +264,17 @@ def flatten_dict(dict_, parent_key='', separator='_'):
 
 def flatten_list(list_):
     """
-    Flattens out nested lists.
+    Flattens out nested lists and tuples (tuples are
+    converted to lists for this purpose).
 
     Example:
-    In [1]: flatten_list([1, [[2, 3], [4, 5]], 6])                                 Out[1]: [1, 2, 3, 4, 5, 6]
+    In [1]: flatten_list([1, [[2, 3], [4, 5]], 6])
+    Out[1]: [1, 2, 3, 4, 5, 6]
     """
     items = []
     for element in list_:
-        if isinstance(element, list):
-            items.extend(flatten_list(element))
+        if isinstance(element, (list, tuple)):
+            items.extend(flatten_list(list(element)))
         else:
             items.append(element)
 

@@ -153,7 +153,9 @@ class TestUtilsFunctions(unittest.TestCase):
         self.assertEqual(flatten_list([['Sonic'], ['Youth']]), ['Sonic', 'Youth'])
         self.assertEqual(flatten_list([['Sonic', 'Youth'], ['Judas', 'Priest']]),
                                       ['Sonic', 'Youth', 'Judas', 'Priest'])
-        self.assertEqual(flatten_list([1, [3, 4], 'kiu']), [1, 3, 4, 'kiu'])
+        self.assertEqual(flatten_list([('Napalm', 'Death'), ['Scorn']]),
+                                      ['Napalm', 'Death', 'Scorn'])
+        self.assertEqual(flatten_list([1, [3, 4], 'Darkthrone']), [1, 3, 4, 'Darkthrone'])
         self.assertEqual(flatten_list([1, [[2, 3], [4, 5]], 6]), [1, 2, 3, 4, 5, 6])
 
 
