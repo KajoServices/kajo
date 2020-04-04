@@ -317,6 +317,23 @@ def deep_update(source, overrides):
 
 
 def normalize_keys(dict_, lowercase=True, separator='_'):
+    """
+    Recoursively changes keys to their normalized version:
+    - replaces any special symbol by `separator`
+    - lowercases (if necessary).
+
+    Example:
+    In [1]: input_ = {"Content-Type": "text/html",
+       ...:     "Last-Modified": {
+       ...:          "Day-Of-Week": "Sat",
+       ...:          "Day": 4,
+       ...:          "Month": "Apr"
+       ...:     }
+       ...: }
+    Out[1]:
+    {'content_type': 'text/html',
+     'last_modified': {'day_of_week': 'Sat', 'day': 4, 'month': 'Apr'}}
+    """
     normalized = {}
     for key, val in dict_.items():
         new_key = re.sub('[^A-Za-z0-9]+', separator, key)
