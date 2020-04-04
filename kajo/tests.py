@@ -158,6 +158,35 @@ class TestUtilsFunctions(unittest.TestCase):
         self.assertEqual(flatten_list([1, [3, 4], 'Darkthrone']), [1, 3, 4, 'Darkthrone'])
         self.assertEqual(flatten_list([1, [[2, 3], [4, 5]], 6]), [1, 2, 3, 4, 5, 6])
 
+    def test_normalize_keys(self):
+        input_ = {
+            "Server": "Apache-Coyote/1.1",
+            "Content-Type": "text/html;charset=utf-8",
+            "Last-Modified": {
+                "Day-Of-Week": "Sat",
+                "Day": 4,
+                "Month": "Apr",
+                "Year": 2020,
+                "Hour": "12",
+                "Min": 1,
+                "Sec": 29,
+                "Time-Zone": "GMT"
+            }
+        }
+        output_default = normalize_keys(input_)
+        output_retain_case = normalize_keys(input_, lowercase=False)
+        output_customized = normalize_keys(input_, lowercase=False, separator='')
+        output_intact = normalize_keys(input_, lowercase=False, separator='-')
+
+        self.assertTrue("content_type" in output_default)
+        self.assertTrue("day_of_week" in output_default["last_modified"])
+        self.assertTrue("Day_Of_Week" in output_retain_case["Last_Modified"])
+        self.assertTrue("TimeZone" in output_customized["LastModified"])
+        self.assertEqual(output_customized["LastModified"]["TimeZone"],
+                         input_["Last-Modified"]["Time-Zone"])
+        self.assertTrue("TimeZone" in output_customized["LastModified"])
+        self.assertTrue(input_ == output_intact)
+
 
 class TestDecorators(unittest.TestCase):
     def test_objectify(self):

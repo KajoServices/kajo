@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 import json
 import collections
 
@@ -313,3 +314,17 @@ def deep_update(source, overrides):
             source[key] = overrides[key]
 
     return source
+
+
+def normalize_keys(dict_, lowercase=True, separator='_'):
+    normalized = {}
+    for key, val in dict_.items():
+        new_key = re.sub('[^A-Za-z0-9]+', separator, key)
+        new_key = new_key.lower() if lowercase else new_key
+
+        if isinstance(val, dict):
+            val = normalize_keys(val, lowercase, separator)
+
+        normalized[new_key] = val
+
+    return normalized
