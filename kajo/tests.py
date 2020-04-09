@@ -187,6 +187,27 @@ class TestUtilsFunctions(unittest.TestCase):
         self.assertTrue("TimeZone" in output_customized["LastModified"])
         self.assertTrue(input_ == output_intact)
 
+    def test_compress_and_sort_by_occurence(self):
+        names = ['Siddhartha', 'Varuna', 'Daruma', 'Siddhartha', 'Daruma', 'Kevala', 'Siddhartha']
+
+        res = compress_and_sort_by_occurence(names)
+        self.assertEqual(res[:2], ['Siddhartha', 'Daruma'])
+        self.assertTrue(all(x in res[2:4] for x in ['Varuna', 'Kevala']))
+
+        res = compress_and_sort_by_occurence(names, reverse=False)
+        self.assertTrue(all(x in res[:2] for x in ['Varuna', 'Kevala']))
+        self.assertEqual(res[2:4], ['Daruma', 'Siddhartha'])
+
+        res = compress_and_sort_by_occurence(names, values_only=False)
+        self.assertEqual(res[:2], [{'elm': 'Siddhartha', 'num': 3},
+                                   {'elm': 'Daruma', 'num': 2}])
+        self.assertTrue(all(x['num'] == 1 for x in res[2:4]))
+
+        res = compress_and_sort_by_occurence(names, reverse=False, values_only=False)
+        self.assertEqual(res[2:4], [{'elm': 'Daruma', 'num': 2},
+                                    {'elm': 'Siddhartha', 'num': 3}])
+        self.assertTrue(all(x['num'] == 1 for x in res[:2]))
+
 
 class TestDecorators(unittest.TestCase):
     def test_objectify(self):

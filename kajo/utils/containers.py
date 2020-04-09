@@ -2,7 +2,7 @@
 
 import re
 import json
-import collections
+from collections import Mapping, MutableMapping
 
 
 class RecordDict(dict):
@@ -253,7 +253,7 @@ def flatten_dict(dict_, parent_key='', separator='_'):
     items = []
     for key, val in dict_.items():
         new_key = '{0}{1}{2}'.format(parent_key, separator, key) if parent_key else key
-        if isinstance(val, collections.MutableMapping):
+        if isinstance(val, MutableMapping):
             items.extend(
                 flatten_dict(val, new_key, separator=separator).items()
                 )
@@ -307,7 +307,7 @@ def deep_update(source, overrides):
     Modifies `source` in place.
     """
     for key, value in overrides.items():
-        if isinstance(value, collections.Mapping) and value:
+        if isinstance(value, Mapping) and value:
             returned = deep_update(source.get(key, {}), value)
             source[key] = returned
         else:
@@ -345,3 +345,33 @@ def normalize_keys(dict_, lowercase=True, separator='_'):
         normalized[new_key] = val
 
     return normalized
+
+
+def compress_and_sort_by_occurence(container, reverse=True, values_only=True):
+    """
+    Returns distinct elements sorted by the number of their
+    occurence in `container`.
+    Useful when it is necessary to push something relevant
+    to the top (e.g. distinct topics from the list of topics).
+
+    :param container: <list> or <tuple> whose elements are <str>
+    :param reverse: <bool>
+    :param values_only: <bool> if True, returns list of keys,
+                               otherwise, returns list of dicts
+                               with number of occurences.
+    :return: <list>
+    """
+    aggregated = {}
+    for elm in container:
+        try:
+            aggregated[elm] += 1
+        except KeyError:
+            aggregated[elm] = 1
+
+    aggregated = [{'elm': t, 'num': n} for t, n in aggregated.items()]
+    aggregated = sorted(aggregated, key=lambda x: x['num'], reverse=reverse)
+
+    if values_only:
+        return [x['elm'] for x in aggregated]
+
+    return aggregated
