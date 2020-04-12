@@ -8,4 +8,4 @@ PROJECT_DIR = os.path.dirname(BASE_DIR)
 if PROJECT_DIR not in sys.path:
     sys.path.append(PROJECT_DIR)
 
-from .generic import objectify
+from .generic import *
