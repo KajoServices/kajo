@@ -26,10 +26,12 @@ def timeit(method):
         result = method(*args, **kwargs)
         time_ended = time.time()
         time_sec = time_ended - time_started
-        print('%s\t%2.2fmin\t%2.8fs\t%sms' % (
+
+        print('{}   {:8.5f} min   {:8.5f} s   {:8.5f} ms'.format(
             method.__name__,
             time_sec / 60,
             time_sec,
             time_sec * 1000))
+
         return result
     return timeit_wrapper
