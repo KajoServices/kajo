@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import time
+
 from kajo.utils import RecordDict
 
 
@@ -15,3 +17,19 @@ def objectify(method):
 
         return result
     return objectify_wrapper
+
+
+def timeit(method):
+    """Profiling decorator, measures function runing time."""
+    def timeit_wrapper(*args, **kwargs):
+        time_started = time.time()
+        result = method(*args, **kwargs)
+        time_ended = time.time()
+        time_sec = time_ended - time_started
+        print('%s\t%2.2fmin\t%2.8fs\t%sms' % (
+            method.__name__,
+            time_sec / 60,
+            time_sec,
+            time_sec * 1000))
+        return result
+    return timeit_wrapper
