@@ -44,12 +44,12 @@ class TestUtilsRecordDictMethods(unittest.TestCase):
         {"element": "bhumi", "consort": {"id": "Dyaus", "sense": "smell"}},
     ]
 
-    def test_init(self):
+    def test__init(self):
         obj = RecordDict(**self.text_dict)
         self.assertEqual(obj.lang.name, self.text_dict["lang"]["name"])
         self.assertTrue(isinstance(obj.place, RecordDict))
 
-    def test_flatten(self):
+    def test__flatten(self):
         flat = {
             "name": "Report Summaries Departement",
             "lang_label": "en",
@@ -83,7 +83,7 @@ class TestUtilsRecordDictMethods(unittest.TestCase):
         with self.assertRaises(KeyError):
             obj["place_location_lon"]
 
-    def test_update(self):
+    def test__update(self):
         test_dict = {
             "name": "Ministry of Silly Walks",
             "curvature": "flat",
@@ -96,7 +96,7 @@ class TestUtilsRecordDictMethods(unittest.TestCase):
         self.assertEqual(obj["name"], "Ministry of Silly Walks")
         self.assertEqual(obj.place.location.lon, 12.5)
 
-    def test_lookup(self):
+    def test__lookup(self):
         obj = RecordDict(**self.text_dict)
         self.assertEqual(obj.lookup("name"), "Report Summaries Departement")
         self.assertEqual(obj.lookup("place.location.lat"), 50.640991)
@@ -104,7 +104,7 @@ class TestUtilsRecordDictMethods(unittest.TestCase):
         paths = ["place.location.xyz", "gorgonzola", "place.belongsto", "wu"]
         self.assertEqual(obj.lookup(*paths), ["Europe"])
 
-    def test_from_list(self):
+    def test__from_list(self):
         obj = RecordDict.from_list(self.test_list_if_nested_dicts,
                                    key="element",
                                    val="consort")
@@ -120,7 +120,7 @@ class TestUtilsRecordDictMethods(unittest.TestCase):
         self.assertEqual(obj.agni.id, "Swaha")
         self.assertEqual(obj.bhumi.sense, "smell")
 
-    def test_from_list_aggregate(self):
+    def test__from_list_aggregate(self):
         converted = {
             "GPE": ["Philippines", "Nigeria", "Turkey"],
             "ORG": ["FSC", "EAGF"]
@@ -141,7 +141,7 @@ class TestUtilsRecordDictMethods(unittest.TestCase):
 class TestUtilsFunctions(unittest.TestCase):
     text_dict = TEXT_DICT.copy()
 
-    def test_deep_update(self):
+    def test__deep_update(self):
         test_dict = {
             "name": "Ministry of Silly Walks",
             "place": {"location": {"lon": 12.5, "lat": 50.640991}}
@@ -151,7 +151,7 @@ class TestUtilsFunctions(unittest.TestCase):
         self.assertEqual(test_dict["name"], self.text_dict["name"])
         self.assertEqual(test_dict["place"]["location"]["lon"], 4.66092)
 
-    def test_flatten_list(self):
+    def test__flatten_list(self):
         self.assertEqual(flatten_list([['Sonic'], ['Youth']]), ['Sonic', 'Youth'])
         self.assertEqual(flatten_list([['Sonic', 'Youth'], ['Judas', 'Priest']]),
                                       ['Sonic', 'Youth', 'Judas', 'Priest'])
@@ -160,7 +160,7 @@ class TestUtilsFunctions(unittest.TestCase):
         self.assertEqual(flatten_list([1, [3, 4], 'Darkthrone']), [1, 3, 4, 'Darkthrone'])
         self.assertEqual(flatten_list([1, [[2, 3], [4, 5]], 6]), [1, 2, 3, 4, 5, 6])
 
-    def test_normalize_keys(self):
+    def test__normalize_keys(self):
         input_ = {
             "Server": "Apache-Coyote/1.1",
             "Content-Type": "text/html;charset=utf-8",
@@ -189,7 +189,7 @@ class TestUtilsFunctions(unittest.TestCase):
         self.assertTrue("TimeZone" in output_customized["LastModified"])
         self.assertTrue(input_ == output_intact)
 
-    def test_compress_and_sort_by_occurence(self):
+    def test__compress_and_sort_by_occurence(self):
         names = ['Siddhartha', 'Varuna', 'Daruma', 'Siddhartha', 'Daruma', 'Kevala', 'Siddhartha']
 
         res = compress_and_sort_by_occurence(names)
@@ -210,7 +210,7 @@ class TestUtilsFunctions(unittest.TestCase):
                                     {'elm': 'Siddhartha', 'num': 3}])
         self.assertTrue(all(x['num'] == 1 for x in res[:2]))
 
-    def test_serialize(self):
+    def test__prepare_to_serialize(self):
         dict_ = {
             'x': 12,
             'y': 0.00034,
@@ -224,7 +224,7 @@ class TestUtilsFunctions(unittest.TestCase):
             ]
         }
         self.assertEqual(
-            serialize(dict_),
+            prepare_to_serialize(dict_),
             {
                 'x': 12,
                 'y': 0.00034,
@@ -240,13 +240,13 @@ class TestUtilsFunctions(unittest.TestCase):
 
 
 class TestTextUtils(unittest.TestCase):
-    def test_generate_key(self):
+    def test__generate_key(self):
         keys = ('feed:twitter:tweet', 1251532472346652673, -1)
         self.assertEqual(generate_key(*keys), '5feb7d8b4a0e441a64bb2e83a83c5839')
 
 
 class TestDecorators(unittest.TestCase):
-    def test_objectify(self):
+    def test__objectify(self):
 
         @objectify
         def test_dict():

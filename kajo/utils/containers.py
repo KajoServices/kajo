@@ -282,7 +282,14 @@ def _serialize_recoursive(branch):
     return branch
 
 
-def serialize(dict_):
+def prepare_to_serialize(dict_):
+    """
+    Prepares dict to be serialized to JSON, reducing to
+    string any struct object (datetime, ObjectID, etc.).
+
+    :param dict_: <dict>
+    :return: <dict> of the same structure
+    """
     if sniff_json(dict_):
         return dict_
 
