@@ -3,6 +3,7 @@
 import unittest
 
 from utils.containers import *
+from utils.textutils import *
 from decorators import *
 
 
@@ -207,6 +208,12 @@ class TestUtilsFunctions(unittest.TestCase):
         self.assertEqual(res[2:4], [{'elm': 'Daruma', 'num': 2},
                                     {'elm': 'Siddhartha', 'num': 3}])
         self.assertTrue(all(x['num'] == 1 for x in res[:2]))
+
+
+class TestTextUtils(unittest.TestCase):
+    def test_generate_key(self):
+        keys = ('feed:twitter:tweet', 1251532472346652673, -1)
+        self.assertEqual(generate_key(*keys), '5feb7d8b4a0e441a64bb2e83a83c5839')
 
 
 class TestDecorators(unittest.TestCase):
