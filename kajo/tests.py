@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+import datetime
 
 from utils.containers import *
 from utils.textutils import *
@@ -208,6 +209,34 @@ class TestUtilsFunctions(unittest.TestCase):
         self.assertEqual(res[2:4], [{'elm': 'Daruma', 'num': 2},
                                     {'elm': 'Siddhartha', 'num': 3}])
         self.assertTrue(all(x['num'] == 1 for x in res[:2]))
+
+    def test_serialize(self):
+        dict_ = {
+            'x': 12,
+            'y': 0.00034,
+            'z': None,
+            't': [
+                127,
+                datetime(2020, 4, 18, 20, 36, 43, 605506),
+                {
+                    'past': datetime(2020, 4, 18, 15, 36, 43, 605511)
+                },
+            ]
+        }
+        self.assertEqual(
+            serialize(dict_),
+            {
+                'x': 12,
+                'y': 0.00034,
+                'z': None,
+                't': [
+                    127,
+                    '2020-04-18T20:36:43.605506',
+                    {
+                        'past': '2020-04-18T15:36:43.605511'
+                    }
+                ]
+            })
 
 
 class TestTextUtils(unittest.TestCase):

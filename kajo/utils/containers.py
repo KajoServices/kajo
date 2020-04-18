@@ -2,6 +2,7 @@
 
 import re
 import json
+from datetime import datetime
 from collections import Mapping, MutableMapping
 
 
@@ -247,6 +248,45 @@ def objectify(method):
 
         return result
     return objectify_wrapper
+
+
+def sniff_json(val):
+    try:
+        json.dumps(val)
+    except TypeError:
+        return False
+    else:
+        return True
+
+
+def _serialize_recoursive(branch):
+    if sniff_json(branch):
+        return branch
+
+    if isinstance(branch, dict):
+        for key, val in branch.items():
+            branch[key] = _serialize_recoursive(val)
+    elif isinstance(branch, (list, tuple)):
+        result = []
+        for elem in branch:
+            elem = _serialize_recoursive(elem)
+            result.append(elem)
+        return result
+
+    else:
+        if isinstance(branch, datetime):
+            branch = branch.isoformat()
+        else:
+            branch = str(branch)
+
+    return branch
+
+
+def serialize(dict_):
+    if sniff_json(dict_):
+        return dict_
+
+    return _serialize_recoursive(dict_)
 
 
 def flatten_dict(dict_, parent_key='', separator='_'):
