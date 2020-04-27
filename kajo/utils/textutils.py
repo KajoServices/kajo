@@ -6,7 +6,7 @@ import hmac
 import random
 from hashlib import md5
 from string import ascii_lowercase, digits
-
+from urllib import parse
 
 RE_SPACES = re.compile(r'\s+')
 RE_DIGITS = re.compile(r'\[[0-9]*\]')
@@ -96,3 +96,31 @@ def rand_string(size=12):
     """Generates quazi-unique sequence from random digits and letters."""
     return ''.join(random.choice(ascii_lowercase+digits)
                    for x in range(size))
+
+
+class URLNormalizer:
+    def __init__(self, url, **kwargs):
+        self._parsed = parse.urlparse(url)
+        self._uri = ''
+        self._domain = ''
+        self._domain_name = ''
+        if self.is_valid:
+            self._uri = url
+            self._domain = '{uri.scheme}://{uri.netloc}/'.format(uri=self._parsed)
+            self._domain_name = re.sub('.*w\.', '', self._parsed.netloc, 1)
+
+    @property
+    def domain(self): return self._domain
+
+    @property
+    def uri(self): return self._uri
+
+    @property
+    def domain_name(self): return self._domain_name
+
+    @property
+    def parsed(self): return self._parsed
+
+    @property
+    def is_valid(self):
+        return all([self.parsed.scheme, self.parsed.netloc, self.parsed.path])

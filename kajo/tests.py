@@ -244,6 +244,22 @@ class TestTextUtils(unittest.TestCase):
         keys = ('feed:twitter:tweet', 1251532472346652673, -1)
         self.assertEqual(generate_key(*keys), '5feb7d8b4a0e441a64bb2e83a83c5839')
 
+    def test__URLNormalizer(self):
+        url = 'https://example.com/app/page1/?limit=32&query#image'
+        normalized = URLNormalizer(url)
+        self.assertEqual(normalized.domain, 'https://example.com/')
+        self.assertEqual(normalized.domain_name, 'example.com')
+        self.assertEqual(normalized.parsed.scheme, 'https')
+        self.assertTrue(normalized.is_valid)
+        self.assertEqual(normalized.uri, url)
+
+        url = 'https://example.'
+        normalized = URLNormalizer(url)
+        self.assertFalse(normalized.is_valid)
+        self.assertEqual(normalized.domain, '')
+        self.assertEqual(normalized.domain_name, '')
+        self.assertEqual(normalized.uri, '')
+
 
 class TestDecorators(unittest.TestCase):
     def test__objectify(self):
