@@ -240,6 +240,15 @@ class TestUtilsFunctions(unittest.TestCase):
 
 
 class TestTextUtils(unittest.TestCase):
+    def test__rand_string(self):
+        self.assertEqual(len(rand_string()), 12)
+        self.assertEqual(len(rand_string(5)), 5)
+        self.assertEqual(len(rand_string(1)), 1)
+        self.assertEqual(rand_string(0), '')
+        self.assertEqual(rand_string(-3), '')
+        with self.assertRaises(TypeError):
+            rand_string(0.99999)
+
     def test__generate_key(self):
         keys = ('feed:twitter:tweet', 1251532472346652673, -1)
         self.assertEqual(generate_key(*keys), '5feb7d8b4a0e441a64bb2e83a83c5839')
