@@ -238,6 +238,15 @@ class TestUtilsFunctions(unittest.TestCase):
                 ]
             })
 
+    def test__distinct(self):
+        in_ = [11, 12, 18, 11, 18, 12, 22]
+        out_ = distinct(in_, preserve_order=True)
+        self.assertEqual(out_, [11, 12, 18, 22])
+
+        in_ = ['Sæwine', 'Sæwine', 'Pipra', 'Patrick', 'Pipra', 'Rasa', 'Patrick', 'Nermin', 'Seren']
+        out_ = distinct(in_, preserve_order=True)
+        self.assertEqual(out_, ['Sæwine', 'Pipra', 'Patrick', 'Rasa', 'Nermin', 'Seren'])
+
 
 class TestTextUtils(unittest.TestCase):
     def test__rand_string(self):

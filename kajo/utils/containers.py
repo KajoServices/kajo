@@ -348,6 +348,19 @@ def ensure_list(obj):
     return [obj]
 
 
+def distinct(container, preserve_order=False):
+    """
+    Returns distinct elements from sequence
+    while preserving the order of occurence.
+    """
+    if not preserve_order:
+        return list(set(container))
+
+    seen = set()
+    seen_add = seen.add
+    return [x for x in container if not (x in seen or seen_add(x))]
+
+
 def deep_update(source, overrides):
     """
     Updates a nested dictionary or similar mapping.
