@@ -61,7 +61,7 @@ class TextCleaner:
         :param distinct: <bool>
         :return: <list>
         """
-        urls = RE_URLS.findall(self.text.lower())
+        urls = RE_URLS.findall(self.text)
         clean_urls = []
         for url in urls:
             # Get the last character.

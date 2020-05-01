@@ -2,6 +2,7 @@
 
 import subprocess
 import tempfile
+import errno
 from contextlib import contextmanager
 
 
