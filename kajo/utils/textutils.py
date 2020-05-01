@@ -8,6 +8,8 @@ from hashlib import md5
 from string import ascii_lowercase, digits
 from urllib import parse
 
+from .containers import distinct_elements
+
 RE_SPACES = re.compile(r'\s+')
 RE_DIGITS = re.compile(r'\[[0-9]*\]')
 RE_SPECIALSYMB = re.compile(r'[^a-zA-Z0-9]')
@@ -74,7 +76,7 @@ class TextCleaner:
             clean_urls.append(url)
 
         if distinct:
-            clean_urls = list(set(clean_urls))
+            clean_urls = distinct_elements(clean_urls, preserve_order=True)
 
         return clean_urls
 

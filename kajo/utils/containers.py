@@ -348,7 +348,7 @@ def ensure_list(obj):
     return [obj]
 
 
-def distinct(container, preserve_order=False):
+def distinct_elements(container, preserve_order=False):
     """
     Returns distinct elements from sequence
     while preserving the order of occurence.

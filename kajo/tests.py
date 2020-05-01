@@ -240,11 +240,11 @@ class TestUtilsFunctions(unittest.TestCase):
 
     def test__distinct(self):
         in_ = [11, 12, 18, 11, 18, 12, 22]
-        out_ = distinct(in_, preserve_order=True)
+        out_ = distinct_elements(in_, preserve_order=True)
         self.assertEqual(out_, [11, 12, 18, 22])
 
         in_ = ['Sæwine', 'Sæwine', 'Pipra', 'Patrick', 'Pipra', 'Rasa', 'Patrick', 'Nermin', 'Seren']
-        out_ = distinct(in_, preserve_order=True)
+        out_ = distinct_elements(in_, preserve_order=True)
         self.assertEqual(out_, ['Sæwine', 'Pipra', 'Patrick', 'Rasa', 'Nermin', 'Seren'])
 
 
@@ -277,6 +277,11 @@ class TestTextUtils(unittest.TestCase):
         self.assertEqual(normalized.domain, '')
         self.assertEqual(normalized.domain_name, '')
         self.assertEqual(normalized.uri, '')
+
+    def test__TextCleaner(self):
+        text = 'These penguins took a stroll through the quiet streets of Cape Town as residents in South Africa self-isolate amid COVID-19 lockdown. https://t.co/efBUX6mydx https://t.co/MCtU22fJ5p'
+        self.assertEqual(TextCleaner(text).extract_urls(),
+                         ['https://t.co/efBUX6mydx', 'https://t.co/MCtU22fJ5p'])
 
 
 class TestDecorators(unittest.TestCase):
