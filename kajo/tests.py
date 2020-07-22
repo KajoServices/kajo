@@ -262,6 +262,19 @@ class TestTextUtils(unittest.TestCase):
         keys = ('feed:twitter:tweet', 1251532472346652673, -1)
         self.assertEqual(generate_key(*keys), '5feb7d8b4a0e441a64bb2e83a83c5839')
 
+    def test__remove_repeated_punctuation(self):
+        text = 'Impacts of demographic change on public expenditure.........'
+        self.assertEqual(remove_repeated_punctuation(text),
+                         'Impacts of demographic change on public expenditure.')
+
+        text = 'What??! Get your milkshake and leave!!!'
+        self.assertEqual(remove_repeated_punctuation(text),
+                         'What?! Get your milkshake and leave!')
+
+        text = 'Is it raining???? No but...,,,, it is snowing!!!!!!!###!@#@@@@'
+        self.assertEqual(remove_repeated_punctuation(text),
+                         'Is it raining? No but., it is snowing!#!@#@')
+
     def test__URLNormalizer(self):
         url = 'https://example.com/app/page1/?limit=32&query#image'
         normalized = URLNormalizer(url)

@@ -5,7 +5,8 @@ import uuid
 import hmac
 import random
 from hashlib import md5
-from string import ascii_lowercase, digits
+from string import ascii_lowercase, digits, punctuation
+from itertools import groupby
 from urllib import parse
 
 from .containers import distinct_elements
@@ -15,6 +16,41 @@ RE_DIGITS = re.compile(r'\[[0-9]*\]')
 RE_SPECIALSYMB = re.compile(r'[^a-zA-Z0-9]')
 RE_AZ09 = re.compile(r'[^a-zA-Z0-9/]')
 RE_URLS = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
+
+
+def generate_key(*values, delimiter='_'):
+    """Generates random UUID and HMACs it with MD5."""
+    if not values:
+        new_uuid = uuid.uuid4()
+    else:
+        new_uuid = [str(x)for x in values]
+        new_uuid = delimiter.join(new_uuid)
+
+    new_uuid = str(new_uuid).encode('utf-8')
+
+    return hmac.new(new_uuid, digestmod=md5).hexdigest()
+
+
+def rand_string(size=12):
+    """Generates quazi-unique sequence from random digits and letters."""
+    return ''.join(random.choice(ascii_lowercase+digits)
+                   for x in range(size))
+
+
+def remove_repeated_punctuation(text):
+    """
+    Removes repeated puntuation such as '???' or '...'.
+    Warning: it will remove '...' from the end of the sentence
+             so use only when this isn't necessary.
+    """
+    result = []
+    for key, grouper in groupby(text):
+        if key in punctuation:
+            result.append(key)
+        else:
+            result.extend(grouper)
+
+    return ''.join(result)
 
 
 class TextCleaner:
@@ -33,11 +69,11 @@ class TextCleaner:
         """
         text = ''
         try:
-            self.text.split('\n')
+            paragraphs = self.text.split('\n')
         except AttributeError:
             return text
 
-        for par in self.text.split('\n'):
+        for par in paragraphs:
             par = par.strip()
             if par == '':
                 continue
@@ -79,25 +115,6 @@ class TextCleaner:
             clean_urls = distinct_elements(clean_urls, preserve_order=True)
 
         return clean_urls
-
-
-def generate_key(*values, delimiter='_'):
-    """Generates random UUID and HMACs it with MD5."""
-    if not values:
-        new_uuid = uuid.uuid4()
-    else:
-        new_uuid = [str(x)for x in values]
-        new_uuid = delimiter.join(new_uuid)
-
-    new_uuid = str(new_uuid).encode('utf-8')
-
-    return hmac.new(new_uuid, digestmod=md5).hexdigest()
-
-
-def rand_string(size=12):
-    """Generates quazi-unique sequence from random digits and letters."""
-    return ''.join(random.choice(ascii_lowercase+digits)
-                   for x in range(size))
 
 
 class URLNormalizer:
