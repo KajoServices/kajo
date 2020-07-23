@@ -53,6 +53,25 @@ def remove_repeated_punctuation(text):
     return ''.join(result)
 
 
+def smart_truncate(text, limit=100, suffix='...'):
+    """
+    Truncates a text to the end of the last word before
+    reaching `limit`, and adds `suffix` to the end.
+
+    Since it is using Python's slicing, negative values
+    work, too.
+
+    :param text: <str>
+    :param limit: <int>
+    :param suffix: <str>
+    :return: <str>
+    """
+    if len(text) <= limit:
+        return text
+
+    return text[:limit].rsplit(' ', 1)[0]+suffix
+
+
 class TextCleaner:
     """A simple text cleaning util."""
     def __init__(self, text):

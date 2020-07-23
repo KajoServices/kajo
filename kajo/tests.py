@@ -275,6 +275,20 @@ class TestTextUtils(unittest.TestCase):
         self.assertEqual(remove_repeated_punctuation(text),
                          'Is it raining? No but., it is snowing!#!@#@')
 
+    def test__smart_truncate(self):
+        text = "Let us know if you find this package useful."
+        self.assertEqual(smart_truncate(text), text)
+        self.assertEqual(smart_truncate(text, 44), text)
+        self.assertEqual(smart_truncate(text, 43),
+                         "Let us know if you find this package...")
+        self.assertEqual(smart_truncate(text, -3),
+                         "Let us know if you find this package...")
+        self.assertTrue(smart_truncate(text, 3) == \
+                        smart_truncate(text, 4) == \
+                        smart_truncate(text, 5) == \
+                        "Let...")
+        self.assertEqual(smart_truncate(text, 16, suffix='?'), "Let us know if?")
+
     def test__URLNormalizer(self):
         url = 'https://example.com/app/page1/?limit=32&query#image'
         normalized = URLNormalizer(url)
