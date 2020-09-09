@@ -2,6 +2,7 @@
 
 import datetime
 import calendar
+from math import isclose
 
 
 def make_tz_aware(dt, tz=datetime.timezone.utc):
@@ -87,3 +88,43 @@ def round_datetime_interval(start, end):
         suggested_end = end
 
     return interval, suggested_start, suggested_end
+
+
+def human_readable_time(ms, round_to=3):
+    """
+    A very crude function for human readable time:
+    - anything shorter than millisec is instant
+    - everything longer than hours are days.
+    """
+    if ms < 0:
+        raise Exception("Time value cannot be negative!")
+
+    if isclose(ms, 0, abs_tol=1e-01):
+        return "instantly"
+
+    patt = "{:." + str(round_to) + "f}"
+    if ms < 1000:
+        patt += " ms"
+        return patt.format(ms)
+
+    interval = ms / 1000
+    if 60 > interval >= 1:
+        patt += " sec"
+        return patt.format(interval)
+
+    interval = interval / 60
+    if 60 > interval >= 1:
+        patt += " min"
+        return patt.format(interval)
+
+    interval = interval / 60
+    if 24 > interval >= 1:
+        patt += " hr"
+        return patt.format(interval)
+
+    interval = interval / 24
+    if isclose(interval, 1, abs_tol=1e-01):
+        patt += " day"
+    else:
+        patt += " days"
+    return patt.format(interval)
