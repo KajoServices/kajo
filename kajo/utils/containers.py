@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+"""Operations with container-like classes (lists, dictionaries, etc.)"""
+
 import re
 import json
 from datetime import datetime

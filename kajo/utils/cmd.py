@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """Command line and file operations."""
 
 import subprocess

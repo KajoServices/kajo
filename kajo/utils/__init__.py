@@ -11,4 +11,5 @@ if PROJECT_DIR not in sys.path:
 from .containers import *
 from .textutils import *
 from .datetimeutils import *
+from .calcs import *
 from .cmd import *

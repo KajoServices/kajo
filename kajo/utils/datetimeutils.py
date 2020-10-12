@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+"""Operations with dates and timestamps."""
+
+
 import datetime
 import calendar
 from math import isclose

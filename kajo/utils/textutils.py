@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+"""Operations with text (including URLs)."""
+
+
 import re
 import uuid
 import hmac
