@@ -17,6 +17,7 @@ from .containers import distinct_elements
 RE_SPACES = re.compile(r'\s+')
 RE_DIGITS = re.compile(r'\d+')
 RE_SPECIALSYMB = re.compile(r'[^a-zA-Z0-9]')
+RE_NOLETTERS = re.compile(r'[^a-zA-Z]')
 RE_AZ09 = re.compile(r'[^a-zA-Z0-9/]')
 RE_URLS = re.compile(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+')
 
