@@ -147,14 +147,12 @@ def remove_nontext(text):
         _ACCEPTED = symbols + ascii_letters + digits + punctuation
 
         # Additional allowed symbols.
-        _ACCEPTED += "„”"
+        _ACCEPTED += "„”–—"
 
     result = ""
     for piece in text:
         if (piece in _ACCEPTED) or (piece in [" ", "\n", "\r"]):
             result += piece
-        else:
-            pass
 
     return result
 
